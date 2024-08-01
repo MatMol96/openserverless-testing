@@ -4,7 +4,7 @@ tasks:
 
   vm:config:
     - >
-      nuv config aws 
+      ops config aws 
       --access="$AWS_ACCESS_KEY_ID" 
       --secret="$AWS_SECRET_ACCESS_KEY" 
       --region=us-east-2
@@ -17,22 +17,22 @@ tasks:
   vm:create:
     cmds:
     - task: vm:config
-    - nuv cloud aws vm-create {{.NAME}}
-    - nuv cloud aws vm-getip {{.NAME}} >_ip
-    - nuv cloud {{.TYPE}} create SERVER=$(cat _ip) USERNAME=ubuntu
+    - ops cloud aws vm-create {{.NAME}}
+    - ops cloud aws vm-getip {{.NAME}} >_ip
+    - ops cloud {{.TYPE}} create SERVER=$(cat _ip) USERNAME=ubuntu
     requires: 
       vars: [NAME, TYPE]
 
   vm:delete:
     cmds:
     - task: vm:config
-    - nuv cloud aws vm-delete {{.NAME}}
+    - ops cloud aws vm-delete {{.NAME}}
     requires: 
       vars: [NAME]
 
   cluster:config:
     - >
-      nuv config eks
+      ops config eks
       --access="$AWS_ACCESS_KEY_ID" 
       --secret="$AWS_SECRET_ACCESS_KEY" 
       --name=$AWS_CLUSTER_NAME
@@ -45,9 +45,9 @@ tasks:
 
   cluster:create:
     - task: cluster:config
-    - nuv cloud eks create
+    - ops cloud eks create
 
   cluster:delete:
     - task: cluster:config
-    - nuv cloud eks delete
+    - ops cloud eks delete
 

@@ -1,78 +1,78 @@
 Start
   $ export EXTRA=D=1
-  $ nuv setup status
-  nuv setup devcluster --status
+  $ ops setup status
+  ops setup devcluster --status
 Docker
-  $ nuv setup devcluster
-  nuv setup docker create
-  nuv setup kubernetes create
-  nuv setup nuvolaris login
-  $ nuv setup status
-  nuv setup devcluster --status
-  $ nuv setup devcluster --status
-  nuv setup docker status
-  $ nuv setup uninstall
-  nuv setup devcluster --uninstall
-  $ nuv setup devcluster --uninstall
-  nuv setup docker delete
-  $ nuv setup status
+  $ ops setup devcluster
+  ops setup docker create
+  ops setup kubernetes create
+  ops setup nuvolaris login
+  $ ops setup status
+  ops setup devcluster --status
+  $ ops setup devcluster --status
+  ops setup docker status
+  $ ops setup uninstall
+  ops setup devcluster --uninstall
+  $ ops setup devcluster --uninstall
+  ops setup docker delete
+  $ ops setup status
   nothing installed yet
 Cluster no context
-  $ nuv setup cluster
-  nuv setup kubernetes create CONTEXT=
-  nuv setup nuvolaris login
-  $ nuv setup status
-  nuv setup cluster  --status
-  $ nuv setup cluster --status
-  nuv setup kubernetes status CONTEXT=
-  $ nuv setup uninstall
-  nuv setup cluster --uninstall
-  $ nuv setup cluster --uninstall
-  nuv setup kubernetes delete CONTEXT=
-  $ nuv setup status
+  $ ops setup cluster
+  ops setup kubernetes create CONTEXT=
+  ops setup nuvolaris login
+  $ ops setup status
+  ops setup cluster  --status
+  $ ops setup cluster --status
+  ops setup kubernetes status CONTEXT=
+  $ ops setup uninstall
+  ops setup cluster --uninstall
+  $ ops setup cluster --uninstall
+  ops setup kubernetes delete CONTEXT=
+  $ ops setup status
   nothing installed yet
 Cluster with context
-  $ nuv setup cluster demo
-  nuv setup kubernetes create CONTEXT=demo
-  nuv setup nuvolaris login
-  $ nuv setup status
-  nuv setup cluster demo --status
-  $ nuv setup cluster demo --status
-  nuv setup kubernetes status CONTEXT=demo
-  $ nuv setup uninstall
-  nuv setup cluster demo --uninstall
-  $ nuv setup cluster demo --uninstall
-  nuv setup kubernetes delete CONTEXT=demo
-  $ nuv setup status
+  $ ops setup cluster demo
+  ops setup kubernetes create CONTEXT=demo
+  ops setup nuvolaris login
+  $ ops setup status
+  ops setup cluster demo --status
+  $ ops setup cluster demo --status
+  ops setup kubernetes status CONTEXT=demo
+  $ ops setup uninstall
+  ops setup cluster demo --uninstall
+  $ ops setup cluster demo --uninstall
+  ops setup kubernetes delete CONTEXT=demo
+  $ ops setup status
   nothing installed yet
 Server no user
-  $ nuv setup server demo
-  nuv setup k3s create SERVER=demo USERNAME=
-  nuv setup kubernetes create
-  nuv setup nuvolaris login
-  $ nuv setup status
-  nuv setup server demo  --status
-  $ nuv setup server demo --status
-  nuv setup k3s status SERVER=demo USERNAME=
-  $ nuv setup uninstall
-  nuv setup server demo --uninstall
-  $ nuv setup server demo --uninstall
-  nuv setup k3s delete SERVER=demo USERNAME=
-  $ nuv setup status
+  $ ops setup server demo
+  ops setup k3s create SERVER=demo USERNAME=
+  ops setup kubernetes create
+  ops setup nuvolaris login
+  $ ops setup status
+  ops setup server demo  --status
+  $ ops setup server demo --status
+  ops setup k3s status SERVER=demo USERNAME=
+  $ ops setup uninstall
+  ops setup server demo --uninstall
+  $ ops setup server demo --uninstall
+  ops setup k3s delete SERVER=demo USERNAME=
+  $ ops setup status
   nothing installed yet
 Server with user
-  $ nuv setup server demo user
-  nuv setup k3s create SERVER=demo USERNAME=user
-  nuv setup kubernetes create
-  nuv setup nuvolaris login
-  $ nuv setup status
-  nuv setup server demo user --status
-  $ nuv setup server demo user --status
-  nuv setup k3s status SERVER=demo USERNAME=user
-  $ nuv setup uninstall
-  nuv setup server demo user --uninstall
-  $ nuv setup server demo user --uninstall
-  nuv setup k3s delete SERVER=demo USERNAME=user
-  $ nuv setup status
+  $ ops setup server demo user
+  ops setup k3s create SERVER=demo USERNAME=user
+  ops setup kubernetes create
+  ops setup nuvolaris login
+  $ ops setup status
+  ops setup server demo user --status
+  $ ops setup server demo user --status
+  ops setup k3s status SERVER=demo USERNAME=user
+  $ ops setup uninstall
+  ops setup server demo user --uninstall
+  $ ops setup server demo user --uninstall
+  ops setup k3s delete SERVER=demo USERNAME=user
+  $ ops setup status
   nothing installed yet
 

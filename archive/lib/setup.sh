@@ -18,17 +18,17 @@
 TYPE="${1:?test type}"
 TYPE="$(echo $TYPE | awk -F- '{print $1}')"
 
-## install the latest version of nuv
+## install the latest version of ops
 # cleanup, just in case
-VER="$(curl https://raw.githubusercontent.com/nuvolaris/olaris/0.3.0/nuvroot.json | jq .version -r)"
-URL="https://github.com/nuvolaris/nuv/releases/download/$VER/nuv_${VER}_amd64.deb"
-sudo dpkg -r nuv
-sudo rm -f /usr/local/bin/nuv /usr/bin/nuv
-sudo rm -Rf ~/.nuv/
-wget --no-verbose $URL -O nuv.deb
-sudo dpkg -i nuv.deb
-nuv -update
-nuv -info
+VER="$(curl https://raw.githubusercontent.com/apache/openserverless-cli/0.3.0/nuvroot.json | jq .version -r)"
+URL="https://github.com/apache/openserverless-cli/releases/download/$VER/ops_${VER}_amd64.deb"
+sudo dpkg -r ops
+sudo rm -f /usr/local/bin/ops /usr/bin/ops
+sudo rm -Rf ~/.ops/
+wget --no-verbose $URL -O ops.deb
+sudo dpkg -i ops.deb
+ops -update
+ops -info
 
 ## install task and cram
 if ! which task; then

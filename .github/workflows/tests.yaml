@@ -16,7 +16,7 @@
 # under the License.
 #
 name: AllTests
-run-name: Testing nuvolaris-testing branch/tag ${{ github.ref_name}}
+run-name: Testing openserverless-testing branch/tag ${{ github.ref_name}}
 
 on:
   push:
@@ -59,14 +59,14 @@ jobs:
         run:  .github/debugAction.sh
       - name: Wait for Debug (if requested)
         run: .github/waitIfDebug.sh
-      - name: Nuv
+      - name: ops
         run: |
           VER="$(curl https://raw.githubusercontent.com/nuvolaris/olaris/3.0.0-testing/nuvroot.json | jq .version -r)"
-          URL="https://github.com/nuvolaris/nuv/releases/download/$VER/nuv_${VER}_amd64.deb"
-          wget --no-verbose $URL -O nuv.deb
-          sudo dpkg -i nuv.deb
-          nuv -update
-          nuv -info
+          URL="https://github.com/nuvolaris/ops/releases/download/$VER/nuv_${VER}_amd64.deb"
+          wget --no-verbose $URL -O ops.deb
+          sudo dpkg -i ops.deb
+          ops -update
+          ops -info
       - name: 1 Deploy
         run: |
              touch .secrets
@@ -107,23 +107,23 @@ jobs:
       - name: 'Update plugin'
         if: ${{ startsWith(github.ref_name, 'gke') }}
         run: gcloud components install gke-gcloud-auth-plugin
-      - name: Nuv
+      - name: ops
         run: |
           $jsonContent = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/nuvolaris/olaris/3.0.0-testing/nuvroot.json"
           $VER = $jsonContent.version
-          $URL = "https://github.com/nuvolaris/nuv/releases/download/$VER/nuv_${VER}_amd64.msi"
-          Invoke-WebRequest -Uri $URL -OutFile "nuv.msi"
-          msiexec /i nuv.msi /passive
-          $procMain = Start-Process "msiexec" "/i nuv.msi /qn" -NoNewWindow -PassThru
+          $URL = "https://github.com/nuvolaris/ops/releases/download/$VER/nuv_${VER}_amd64.msi"
+          Invoke-WebRequest -Uri $URL -OutFile "ops.msi"
+          msiexec /i ops.msi /passive
+          $procMain = Start-Process "msiexec" "/i ops.msi /qn" -NoNewWindow -PassThru
           echo "Install started, waiting for finish"
           $procMain.WaitForExit()
           echo "Install completed"
           Add-Content $env:GITHUB_PATH "C:\Program Files\Nuvolaris"
-      - name: Nuv Update
+      - name: ops Update
         shell: bash
         run: |
-           nuv -update
-           nuv -info
+           ops -update
+           ops -info
       - name: 1 Deploy
         shell: bash
         run: tests/1-deploy.sh $PLATFORM
@@ -180,14 +180,14 @@ jobs:
       - name: 'Update plugin'
         if: ${{ startsWith(github.ref_name, 'gke') }}
         run: gcloud components install gke-gcloud-auth-plugin
-      - name: Nuv
+      - name: ops
         run: |
           VER="$(curl https://raw.githubusercontent.com/nuvolaris/olaris/3.0.0-testing/nuvroot.json | jq .version -r)"
-          URL="https://github.com/nuvolaris/nuv/releases/download/$VER/nuv_${VER}_amd64.pkg"
-          curl --progress-bar -L $URL >nuv.pkg
-          sudo installer -target / -pkg nuv.pkg
-          nuv -update
-          nuv -info
+          URL="https://github.com/nuvolaris/ops/releases/download/$VER/nuv_${VER}_amd64.pkg"
+          curl --progress-bar -L $URL >ops.pkg
+          sudo installer -target / -pkg ops.pkg
+          ops -update
+          ops -info
       - name: 1 Deploy
         run: tests/1-deploy.sh $PLATFORM
       - name: Debug Action (if requested)

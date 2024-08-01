@@ -39,15 +39,15 @@ tasks:
   setup: { silent: true }
 
   status:
-    - nuv config use
-    - nuv debug info
+    - ops config use
+    - ops debug info
 
   kind:create:
     - which docker
-    - nuv setup docker create
+    - ops setup docker create
 
   kind:delete:
-    - nuv setup docker delete
+    - ops setup docker delete
 
   k3s:create:
     cmds:
@@ -59,8 +59,8 @@ tasks:
           REGION: us-east1-d
           IMAGE: ubuntu-minimal-2204-lts
     - task: aws:vm:config
-    - nuv cloud gcloud vm-getip k3s-test >_ip
-    - nuv cloud aws zone-update k3s.nuvtest.net --wildcard --ip=$(cat _ip)
+    - ops cloud gcloud vm-getip k3s-test >_ip
+    - ops cloud aws zone-update k3s.nuvtest.net --wildcard --ip=$(cat _ip)
 
   k3s:arm:create:
     cmds:
@@ -72,8 +72,8 @@ tasks:
           REGION: europe-west4-a
           IMAGE: ubuntu-minimal-2204-lts-arm64
     - task: aws:vm:config
-    - nuv cloud gcloud vm-getip k3s-arm-test >_ip
-    - nuv cloud aws zone-update arm.nuvtest.net --wildcard --ip=$(cat _ip)   
+    - ops cloud gcloud vm-getip k3s-arm-test >_ip
+    - ops cloud aws zone-update arm.nuvtest.net --wildcard --ip=$(cat _ip)   
 
   mk8s:create:
     cmds:
@@ -83,8 +83,8 @@ tasks:
           TYPE: mk8s
     - task: aws:vm:config
     - task: gcp:vm:config
-    - nuv cloud gcloud vm-getip mk8s-test >_ip
-    - nuv cloud aws zone-update mk8s.nuvtest.net --wildcard --ip=$(cat _ip)
+    - ops cloud gcloud vm-getip mk8s-test >_ip
+    - ops cloud aws zone-update mk8s.nuvtest.net --wildcard --ip=$(cat _ip)
 
   k3s:delete:
     cmds:
@@ -118,9 +118,9 @@ tasks:
     - mkdir -p conf/{{.CLOUD}}
     - cp conf/{{.CLOUD}}-install-config.yaml conf/{{.CLOUD}}/install-config.yaml
     - openshift-install create cluster --dir conf/{{.CLOUD}}
-    - nuv cloud osh import conf/{{.CLOUD}}/auth/kubeconfig
-    - nuv cloud osh setup
-    - nuv config use openshift --rename=openshift-nuvolaris-testing
+    - ops cloud osh import conf/{{.CLOUD}}/auth/kubeconfig
+    - ops cloud osh setup
+    - ops config use openshift --rename=openshift-nuvolaris-testing
 
   osh:delete:
     - openshift-install destroy cluster --dir conf/{{.CLOUD}}
@@ -128,8 +128,8 @@ tasks:
   eks:create:
     cmds:
     - task aws:cluster:create
-    - nuv cloud eks lb >_cname
-    - nuv cloud aws zone-update eks.nuvtest.net --wildcard --cname=$(cat _cname)
+    - ops cloud eks lb >_cname
+    - ops cloud aws zone-update eks.nuvtest.net --wildcard --cname=$(cat _cname)
 
   eks:delete:
     cmds:
@@ -138,8 +138,8 @@ tasks:
   aks:create:
     cmds:
     - task azure:cluster:create
-    - nuv cloud aks lb >_ip
-    - nuv cloud aws zone-update aks.nuvtest.net --wildcard --ip $(cat _ip)
+    - ops cloud aks lb >_ip
+    - ops cloud aws zone-update aks.nuvtest.net --wildcard --ip $(cat _ip)
   
   aks:delete:
     cmds:
@@ -174,20 +174,20 @@ tasks:
   # prereq: ssh key in ~/.ssh/id_rsa
   # two vm created with k3s:create and mk8s:create
   secrets-vm: |
-    K3S_IP=$(nuv cloud gcloud vm-getip k3s-test)
+    K3S_IP=$(ops cloud gcloud vm-getip k3s-test)
     echo K3S_IP=$K3S_IP >>.secrets
-    MK8S_IP=$(nuv cloud gcloud vm-getip mk8s-test)
+    MK8S_IP=$(ops cloud gcloud vm-getip mk8s-test)
     echo MK8S_IP=$MK8S_IP >>.secrets
   
   # upload secrets to access to kubernetes clusters
   # prereq: eks:create aks:create gke:create openshift:create
-  # kubernetes configs stored in ~/.nuv
+  # kubernetes configs stored in ~/.ops
   secrets-kube: |
     for i in aks eks gke openshift
     do
        f="$i-nuvolaris-testing"
-       nuv config use $f
-       nuv debug kubeconfig
+       ops config use $f
+       ops debug kubeconfig
        VAR="$(echo $i | tr 'a-z-' 'A-Z_')_KUBECONFIG_B64"
        DATA="$(cat ~/.kube/config | base64 -w0)"
        echo "Secret $VAR:"
@@ -264,20 +264,20 @@ tasks:
     - |
       eval $(ssh-agent -s) 
       ssh-add conf/id_rsa
-      nuv cloud k3s kubeconfig SERVER=api.k3s.nuvtest.net USERNAME=ubuntu
-      nuv cloud mk8s kubeconfig SERVER=api.mk8s.nuvtest.net USERNAME=ubuntu
+      ops cloud k3s kubeconfig SERVER=api.k3s.nuvtest.net USERNAME=ubuntu
+      ops cloud mk8s kubeconfig SERVER=api.mk8s.nuvtest.net USERNAME=ubuntu
 
   kubeconfig:
     - task: config
     - task: login
     - task: vmconfig
     - echo "eks kubeconfig"
-    - nuv cloud eks kubeconfig
+    - ops cloud eks kubeconfig
     - echo "gke kubeconfig"
-    - nuv cloud gke kubeconfig
+    - ops cloud gke kubeconfig
     - echo "openshift kubeconfig"
     - KUBECONFIG=conf/osh.kubeconfig oc login https://api.nuvolaris-testing.oshgcp.nuvtest.net:6443 --insecure-skip-tls-verify=true  -u kubeadmin -p $OSH_KUBEADMIN_PASSWORD
-    - nuv cloud osh import conf/osh.kubeconfig 
-    - nuv cloud aks kubeconfig
-    - nuv config use
+    - ops cloud osh import conf/osh.kubeconfig 
+    - ops cloud aks kubeconfig
+    - ops config use
 

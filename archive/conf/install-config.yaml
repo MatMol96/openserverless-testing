@@ -15,7 +15,7 @@ controlPlane:
   replicas: 1
 metadata:
   creationTimestamp: null
-  name: nuv
+  name: ops
 networking:
   clusterNetwork:
     - cidr: 10.128.0.0/14

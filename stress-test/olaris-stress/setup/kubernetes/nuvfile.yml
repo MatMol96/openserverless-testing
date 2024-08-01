@@ -181,7 +181,7 @@ tasks:
     cmds:
       - |
         if test -z "$SECRET_OPENWHISK_NUVOLARIS"
-        then nuv util secret
+        then ops util secret
         else echo Reusing current secrets.
         fi
 
@@ -189,7 +189,7 @@ tasks:
     #desc: deploy instance
     silent: true
     cmds:
-      - nuv stress setup kubernetes whiskcrd
+      - ops stress setup kubernetes whiskcrd
       #- cat _whisk.yaml
       - |
         
@@ -207,16 +207,16 @@ tasks:
     cmds:
       - |
         if $NUVOLARIS_REDIS
-        then nuv setup kubernetes wait OBJECT=po/redis-0
+        then ops setup kubernetes wait OBJECT=po/redis-0
         fi
       - |
         if $NUVOLARIS_MONGODB
-        then nuv setup kubernetes wait OBJECT=po/nuvolaris-mongodb-0
+        then ops setup kubernetes wait OBJECT=po/nuvolaris-mongodb-0
         fi
       - |
         if $NUVOLARIS_MINIO
         then  POD="$(kubectl -n nuvolaris get po -l app=minio -o jsonpath='{.items[0].metadata.name}')"
-              nuv setup kubernetes wait OBJECT=pod/$POD
+              ops setup kubernetes wait OBJECT=pod/$POD
         fi
 
   create:
@@ -320,5 +320,5 @@ tasks:
       - task: operator
       - kubectl -n nuvolaris rollout restart statefulset nuvolaris-operator
     preconditions:      
-      - sh: '[ $IMAGES_OPERATOR != $(nuv debug operator:version) ]'
+      - sh: '[ $IMAGES_OPERATOR != $(ops debug operator:version) ]'
         msg: "Current nuvolaris operator pod it is already updated to newest version. Request ignored."

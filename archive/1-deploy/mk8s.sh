@@ -2,15 +2,15 @@
 set -e
 
 # config
-nuv config reset
+ops config reset
 task config:aws
 
 # reset
-if nuv aws vm-getip mk8s-test
-then nuv aws vm-delete mk8s-test
+if ops aws vm-getip mk8s-test
+then ops aws vm-delete mk8s-test
 fi
 
 # deploy
-nuv aws vm-create mk8s-test --microk8s
+ops aws vm-create mk8s-test --microk8s
 
 
